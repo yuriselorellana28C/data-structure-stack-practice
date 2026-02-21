@@ -1,0 +1,107 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>umg.edu.gt.handler</groupId>
+  <artifactId>stackHandler</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+
+  <name>stackHandler</name>
+
+  <properties>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <!-- ✅ Librería local -->
+    <dependency>
+      <groupId>umg.edu.gt.data-structure.stack</groupId>
+      <artifactId>stack</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+
+      <!-- ✅ Compilar fijo con Java 11 -->
+      <plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-jar-plugin</artifactId>
+  <version>3.3.0</version>
+  <configuration>
+    <archive>
+      <manifest>
+        <mainClass>umg.edu.gt.handler.App</mainClass>
+      </manifest>
+    </archive>
+  </configuration>
+</plugin>
+
+    </plugins>
+  </build>
+
+  <!-- ✅ PERFIL: OFUSCACIÓN -->
+  <profiles>
+    <profile>
+      <id>obfuscate</id>
+
+      <build>
+        <plugins>
+
+          <plugin>
+            <groupId>com.github.wvengen</groupId>
+            <artifactId>proguard-maven-plugin</artifactId>
+            <version>2.6.0</version>
+
+            <executions>
+              <execution>
+                <id>proguard</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>proguard</goal>
+                </goals>
+              </execution>
+            </executions>
+
+            <configuration>
+              <!-- Entrada: jar normal -->
+              <injar>${project.build.directory}/${project.build.finalName}.jar</injar>
+
+              <!-- Salida: jar ofuscado -->
+              <outjar>${project.build.directory}/${project.build.finalName}-obfuscated.jar</outjar>
+
+              <obfuscate>true</obfuscate>
+
+              <!-- Usa el archivo proguard-rules.pro -->
+              <proguardInclude>${project.basedir}/proguard-rules.pro</proguardInclude>
+
+              <!-- Java 11 (módulos) -->
+              <libs>
+                <lib>${java.home}/jmods/java.base.jmod</lib>
+                <lib>${java.home}/jmods/java.logging.jmod</lib>
+                <lib>${java.home}/jmods/java.xml.jmod</lib>
+                <lib>${java.home}/jmods/java.desktop.jmod</lib>
+              </libs>
+            </configuration>
+
+          </plugin>
+
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>
